@@ -131,11 +131,11 @@
                     <div class="carousel-item {% if forloop.first %}active{% endif %}">
                         {% if media.is_video %}
                         <video class="d-block w-100" controls style="max-height: 500px; object-fit: contain;">
-                            <source src="{{ media.arquivo.url }}" type="video/mp4">
+                            <source src="{{ media.arquivo }}" type="video/mp4">
                             Seu navegador não suporta vídeos.
                         </video>
                         {% else %}
-                        <img src="{{ media.arquivo.url }}" class="d-block w-100" alt="{{ media.titulo }}"
+                        <img src="{{ media.arquivo }}" class="d-block w-100" alt="{{ media.titulo }}"
                             style="max-height: 500px; object-fit: contain;">
                         {% endif %}
                         <div class="carousel-caption d-none d-md-block">
@@ -165,7 +165,7 @@
                         {% for foto in fotografias %}
                         <button class="btn btn-link p-0 thumbnail-btn" data-bs-target="#carrosselFotos"
                             data-bs-slide-to="{{ forloop.counter0 }}" title="{{ foto.titulo }}">
-                            <img src="{{ foto.imagem.url }}"
+                            <img src="{{ foto.imagem }}"
                                 style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;"
                                 alt="{{ foto.titulo }}">
                         </button>

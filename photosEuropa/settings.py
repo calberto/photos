@@ -1,0 +1,120 @@
+# photos/settings.py
+import os
+from pathlib import Path
+import dj_database_url
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+from dotenv import load_dotenv
+
+load_dotenv()  # Carrega .env
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-dev-key')
+
+ALLOWED_HOSTS = ['photosEuropa-1.onrender.com', '.onrender.com', 'localhost', '127.0.0.1']
+
+
+
+# Ou leia de variável de ambiente
+if os.getenv('ALLOWED_HOSTS'):
+    ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
+
+# ALLOWED_HOSTS = ['photosEuropa.onrender.com', 'localhost', '127.0.0.1']
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'django_extensions',
+    # Cloudinary - DEVE vir ANTES do seu app
+    'cloudinary_storage',
+    'cloudinary',
+    'core',
+    'crispy_forms',
+]
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # ← Adicione esta linha
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+ROOT_URLCONF = 'photosEuropa.urls'
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],  # Ou [BASE_DIR / 'templates'] se tiver pasta global
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+WSGI_APPLICATION = 'photosEuropa.wsgi.application'
+
+# configuração do PostgreSQL
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL', '').replace('postgres://', 'postgresql://'),
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
+}
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('PGDATABASE'),
+        'USER': os.environ.get('PGUSER'),
+        'PASSWORD': os.environ.get('PGPASSWORD'),
+        'HOST': os.environ.get('PGHOST'),  # ← NÃO É localhost!
+        'PORT': os.environ.get('PGPORT', '5432'),
+    }
+}
+"""
+
+
+# Fallback local (opcional)
+"""
+if os.getenv('DATABASE_URL'):
+    import dj_database_url
+    DATABASES['default'] = dj_database_url.config(default=os.getenv('DATABASE_URL'))
+"""
+
+# Configuração do Cloudinary
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', ''),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY', ''),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', ''),
+}
+
+# Define o storage padrão para arquivos de mídia
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+
+# Arquivos de mídia (upload de fotos)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+
