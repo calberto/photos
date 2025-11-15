@@ -71,6 +71,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'photosEuropa.wsgi.application'
 
 # configuração do PostgreSQL
+"""
 DATABASES = {
     'default': dj_database_url.config(
         default=os.environ.get('DATABASE_URL', '').replace('postgres://', 'postgresql://'),
@@ -89,15 +90,13 @@ DATABASES = {
         'PORT': os.environ.get('PGPORT', '5432'),
     }
 }
-"""
+
 
 
 # Fallback local (opcional)
-"""
 if os.getenv('DATABASE_URL'):
     import dj_database_url
     DATABASES['default'] = dj_database_url.config(default=os.getenv('DATABASE_URL'))
-"""
 
 # Configuração do Cloudinary
 CLOUDINARY_STORAGE = {
